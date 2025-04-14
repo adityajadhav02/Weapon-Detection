@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Weapon Detection System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 mb-0 text-gray-800">Admin Dashboard</h1>
+        <p class="mb-4">Manage users, detections, and system settings.</p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Users</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ users|length }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Detections</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ detections|length }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-camera fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Active Users</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {% set active_count = 0 %}
+                            {% for user in users %}
+                                {% if user.detections|length > 0 %}
+                                    {% set active_count = active_count + 1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {{ active_count }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">High Risk Detections</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {% set high_risk_count = 0 %}
+                            {% for detection in detections %}
+                                {% if detection.confidence > 0.8 %}
+                                    {% set high_risk_count = high_risk_count + 1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {{ high_risk_count }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-primary btn-block">
+                            <i class="fas fa-users me-2"></i>Manage Users
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('admin_detections') }}" class="btn btn-success btn-block">
+                            <i class="fas fa-camera me-2"></i>View Detections
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('add_user') }}" class="btn btn-info btn-block">
+                            <i class="fas fa-user-plus me-2"></i>Add User
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('admin_settings') }}" class="btn btn-secondary btn-block">
+                            <i class="fas fa-cog me-2"></i>System Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Recent Activity</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="activityTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detection in detections|sort(attribute='timestamp', reverse=true) %}
+                                {% if loop.index <= 10 %}
+                                <tr>
+                                    <td>{{ detection.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                    <td>
+                                        {% for user in users %}
+                                            {% if user.id == detection.user_id %}
+                                                {{ user.username }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>Weapon Detection</td>
+                                    <td>
+                                        Confidence: {{ "%.2f"|format(detection.confidence * 100) }}%
+                                        <br>
+                                        Type: {{ detection.weapon_type }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('#activityTable').DataTable({
+            "order": [[0, "desc"]],
+            "pageLength": 10,
+            "language": {
+                "emptyTable": "No recent activity"
+            }
+        });
+    });
+</script>
+{% endblock %} 

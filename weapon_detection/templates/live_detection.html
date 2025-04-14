@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Live Detection - Weapon Detection System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 mb-0 text-gray-800">Live Weapon Detection</h1>
+        <p class="mb-4">Real-time weapon detection using your webcam.</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Video Feed -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Live Feed</h6>
+            </div>
+            <div class="card-body">
+                <div class="video-container position-relative">
+                    <img src="{{ url_for('video_feed') }}" class="img-fluid rounded" alt="Live Feed">
+                    <div class="position-absolute top-0 end-0 p-3">
+                        <button class="btn btn-light btn-sm" onclick="toggleFullscreen()">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detection Info -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Detection Information</h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    The system is actively monitoring for weapons in the video feed.
+                </div>
+                
+                <h6 class="font-weight-bold mb-3">Detection Tips:</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Ensure good lighting conditions
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Keep the camera steady
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Avoid rapid movements
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Maintain proper distance from objects
+                    </li>
+                </ul>
+
+                <div class="mt-4">
+                    <h6 class="font-weight-bold mb-3">Controls:</h6>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" onclick="toggleDetection()">
+                            <i class="fas fa-pause me-2"></i>Pause Detection
+                        </button>
+                        <button class="btn btn-secondary" onclick="captureFrame()">
+                            <i class="fas fa-camera me-2"></i>Capture Frame
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let isDetectionPaused = false;
+    let isFullscreen = false;
+
+    function toggleDetection() {
+        isDetectionPaused = !isDetectionPaused;
+        const button = document.querySelector('button[onclick="toggleDetection()"]');
+        if (isDetectionPaused) {
+            button.innerHTML = '<i class="fas fa-play me-2"></i>Resume Detection';
+            button.classList.replace('btn-primary', 'btn-success');
+        } else {
+            button.innerHTML = '<i class="fas fa-pause me-2"></i>Pause Detection';
+            button.classList.replace('btn-success', 'btn-primary');
+        }
+    }
+
+    function toggleFullscreen() {
+        const videoContainer = document.querySelector('.video-container');
+        if (!isFullscreen) {
+            if (videoContainer.requestFullscreen) {
+                videoContainer.requestFullscreen();
+            } else if (videoContainer.webkitRequestFullscreen) {
+                videoContainer.webkitRequestFullscreen();
+            } else if (videoContainer.msRequestFullscreen) {
+                videoContainer.msRequestFullscreen();
+            }
+            isFullscreen = true;
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            isFullscreen = false;
+        }
+    }
+
+    function captureFrame() {
+        // This function would need to be implemented with backend support
+        alert('Frame capture functionality will be implemented soon!');
+    }
+</script>
+{% endblock %} 

@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Weapon Detection System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 mb-0 text-gray-800">Settings</h1>
+        <p class="mb-4">Manage your account settings and preferences.</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Profile Settings -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Profile Settings</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_profile') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ current_user.username }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ current_user.email }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Settings -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Security Settings</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_profile') }}">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detection Settings -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Detection Settings</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_detection_settings') }}">
+                    <div class="mb-3">
+                        <label for="confidence_threshold" class="form-label">Confidence Threshold</label>
+                        <input type="range" class="form-range" id="confidence_threshold" name="confidence_threshold" min="0" max="100" value="50">
+                        <div class="d-flex justify-content-between">
+                            <small>0%</small>
+                            <small id="confidence_value">50%</small>
+                            <small>100%</small>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="alert_sound" class="form-label">Alert Sound</label>
+                        <select class="form-select" id="alert_sound" name="alert_sound">
+                            <option value="none">None</option>
+                            <option value="beep">Beep</option>
+                            <option value="siren">Siren</option>
+                            <option value="bell">Bell</option>
+                        </select>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="auto_capture" name="auto_capture" checked>
+                        <label class="form-check-label" for="auto_capture">Auto-capture on detection</label>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="show_bounding_boxes" name="show_bounding_boxes" checked>
+                        <label class="form-check-label" for="show_bounding_boxes">Show bounding boxes</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Settings
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Settings -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Notification Settings</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_notification_settings') }}">
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="email_notifications" name="email_notifications" checked>
+                        <label class="form-check-label" for="email_notifications">Email Notifications</label>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="high_risk_alerts" name="high_risk_alerts" checked>
+                        <label class="form-check-label" for="high_risk_alerts">High Risk Alerts</label>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="daily_summary" name="daily_summary">
+                        <label class="form-check-label" for="daily_summary">Daily Summary</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Settings
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update confidence value display
+        const confidenceThreshold = document.getElementById('confidence_threshold');
+        const confidenceValue = document.getElementById('confidence_value');
+        
+        confidenceThreshold.addEventListener('input', function() {
+            confidenceValue.textContent = this.value + '%';
+        });
+
+        // Password confirmation validation
+        const newPassword = document.getElementById('new_password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const form = document.querySelector('form[action="{{ url_for("update_profile") }}"]');
+
+        form.addEventListener('submit', function(e) {
+            if (newPassword.value !== confirmPassword.value) {
+                e.preventDefault();
+                alert('New passwords do not match!');
+            }
+        });
+    });
+</script>
+{% endblock %} 

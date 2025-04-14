@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Detect Weapons - Weapon Detection System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 mb-0 text-gray-800">Weapon Detection</h1>
+        <p class="mb-4">Upload an image to detect weapons using our advanced AI system.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Upload Image</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('detect') }}" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="file" class="form-label">Select Image</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
+                        </div>
+                        <div class="form-text">Supported formats: JPG, PNG, JPEG. Maximum size: 16MB</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location (Optional)</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Enter location where the image was taken">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes (Optional)</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Add any additional notes about this detection"></textarea>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>Detect Weapons
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Detection Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Use clear, well-lit images for best results
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Ensure weapons are visible and not obstructed
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Higher resolution images improve detection accuracy
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Avoid blurry or low-quality images
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Multiple weapons in one image are supported
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Recent Detections</h6>
+            </div>
+            <div class="card-body">
+                {% if recent_detections %}
+                <div class="list-group">
+                    {% for detection in recent_detections[:5] %}
+                    <a href="{{ url_for('detection_results', filename=detection.image_path.split('/')[-1]) }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ detection.weapon_type }}</h6>
+                            <small>{{ detection.timestamp.strftime('%Y-%m-%d') }}</small>
+                        </div>
+                        <p class="mb-1">Confidence: {{ "%.2f"|format(detection.confidence * 100) }}%</p>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-center text-muted">No recent detections</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Preview image before upload
+        const fileInput = document.getElementById('file');
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'mt-3 text-center';
+        fileInput.parentNode.appendChild(previewContainer);
+        
+        fileInput.addEventListener('change', function() {
+            previewContainer.innerHTML = '';
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'img-fluid rounded';
+                    img.style.maxHeight = '300px';
+                    previewContainer.appendChild(img);
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    });
+</script>
+{% endblock %} 

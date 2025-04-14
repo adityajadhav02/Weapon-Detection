@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Detection Results - Weapon Detection System{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Detection Results</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <img src="{{ url_for('static', filename='uploads/' + filename) }}" class="img-fluid" alt="Uploaded Image">
+                    </div>
+                    
+                    {% if results %}
+                        <div class="alert alert-info">
+                            <h5>Detected Weapons:</h5>
+                            <ul class="list-unstyled">
+                                {% for result in results %}
+                                    <li>
+                                        <strong>{{ result.class }}</strong>
+                                        <div class="progress mt-2">
+                                            <div class="progress-bar bg-success" role="progressbar" 
+                                                 style="width: {{ (result.confidence * 100)|round }}%"
+                                                 aria-valuenow="{{ (result.confidence * 100)|round }}" 
+                                                 aria-valuemin="0" 
+                                                 aria-valuemax="100">
+                                                {{ (result.confidence * 100)|round }}%
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            <h5>No weapons detected in the image.</h5>
+                            <p>The system has analyzed the image and found no weapons or suspicious objects.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('detect') }}" class="btn btn-primary">Detect Another Image</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Detection Information</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Image:</strong> {{ filename }}</p>
+                    <p><strong>Date:</strong> {{ now.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <p><strong>Status:</strong> 
+                        {% if results %}
+                            <span class="badge bg-warning">Weapons Detected</span>
+                        {% else %}
+                            <span class="badge bg-success">No Weapons Detected</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4>Tips</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">✓ Ensure good lighting in your images</li>
+                        <li class="mb-2">✓ Keep the camera steady for clear shots</li>
+                        <li class="mb-2">✓ Try different angles if detection fails</li>
+                        <li class="mb-2">✓ Check image quality before uploading</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any additional JavaScript functionality here
+    });
+</script>
+{% endblock %} 

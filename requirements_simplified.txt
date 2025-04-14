@@ -1,0 +1,11 @@
+opencv-python
+numpy
+flask
+flask-login
+flask-sqlalchemy
+flask-wtf
+pillow
+python-dotenv
+email-validator
+werkzeug
+gunicorn 
