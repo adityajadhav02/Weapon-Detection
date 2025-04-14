@@ -12,7 +12,13 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center mb-4">
-                        <img src="{{ url_for('static', filename='uploads/' + filename) }}" class="img-fluid" alt="Uploaded Image">
+                        {% if filename %}
+                            <img src="{{ url_for('static', filename='uploads/' + filename) }}" class="img-fluid" alt="Uploaded Image">
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>No image available
+                            </div>
+                        {% endif %}
                     </div>
                     
                     {% if results %}

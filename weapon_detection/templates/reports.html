@@ -46,7 +46,11 @@
                                 <tr>
                                     <td>{{ detection.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                                     <td>
-                                        <img src="{{ url_for('static', filename=detection.image_path) }}" alt="Detection Image" class="img-thumbnail" style="max-width: 100px;">
+                                        {% if detection.image_path %}
+                                            <img src="{{ url_for('static', filename='uploads/' + detection.image_path) }}" alt="Detection Image" class="img-thumbnail" style="max-width: 100px;">
+                                        {% else %}
+                                            <span class="text-muted">No image available</span>
+                                        {% endif %}
                                     </td>
                                     <td>{{ detection.weapon_type }}</td>
                                     <td>

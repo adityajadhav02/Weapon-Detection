@@ -192,7 +192,14 @@ def detect():
             
             # Secure the filename and create filepath
             filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            
+            # Ensure the upload folder exists
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            
+            # Create a unique filename to avoid overwriting
+            timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+            unique_filename = f"{timestamp}_{filename}"
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
             
             # Save the file
             try:
@@ -216,7 +223,7 @@ def detect():
                 detection = Detection(
                     id=next_detection_id,
                     user_id=current_user.id,
-                    image_path=filename,
+                    image_path=unique_filename,
                     confidence=results[0]['confidence'] if results else 0,
                     weapon_type=results[0]['class'] if results else 'None',
                     location=request.form.get('location', 'Unknown'),
@@ -232,7 +239,7 @@ def detect():
                 return redirect(request.url)
             
             return render_template('detection_results.html', 
-                                filename=filename, 
+                                filename=unique_filename, 
                                 results=results,
                                 now=datetime.datetime.now())
         
@@ -245,9 +252,24 @@ def detect():
 @app.route('/detection_results/<filename>')
 @login_required
 def detection_results(filename):
+    # Construct the full file path
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    results = detector.detect_image(filepath)
-    return render_template('detection_results.html', results=results, filename=filename)
+    
+    # Check if the file exists
+    if not os.path.exists(filepath):
+        flash(f'Image file not found: {filename}', 'danger')
+        return redirect(url_for('detect'))
+    
+    try:
+        # Process the image
+        results = detector.detect_image(filepath)
+        return render_template('detection_results.html', 
+                              results=results, 
+                              filename=filename,
+                              now=datetime.datetime.now())
+    except Exception as e:
+        flash(f'Error processing image: {str(e)}', 'danger')
+        return redirect(url_for('detect'))
 
 @app.route('/live_detection')
 @login_required

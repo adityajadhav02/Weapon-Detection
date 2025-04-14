@@ -91,6 +91,13 @@
                             <small>{{ detection.timestamp.strftime('%Y-%m-%d') }}</small>
                         </div>
                         <p class="mb-1">Confidence: {{ "%.2f"|format(detection.confidence * 100) }}%</p>
+                        <td>
+                            {% if detection.image_path %}
+                                <img src="{{ url_for('static', filename='uploads/' + detection.image_path) }}" alt="Detection Image" class="img-thumbnail" style="max-width: 100px;">
+                            {% else %}
+                                <span class="text-muted">No image available</span>
+                            {% endif %}
+                        </td>
                     </a>
                     {% endfor %}
                 </div>
