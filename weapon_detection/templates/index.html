@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}SafeCamAI - Advanced Security Detection System{% endblock %}
+{% block title %}Home - Weapon Detection System{% endblock %}
 
 {% block content %}
 <div class="row align-items-center mb-5">
     <div class="col-lg-6">
-        <h1 class="display-4 fw-bold mb-4">Welcome to SafeCamAI</h1>
+        <h1 class="display-4 fw-bold mb-4">Advanced Weapon Detection System</h1>
         <p class="lead mb-4">A state-of-the-art solution for detecting weapons in images and video streams using advanced machine learning algorithms.</p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('detect') }}" class="btn btn-primary btn-lg px-4 me-md-2">
-                    <i class="fas fa-camera me-2"></i>Start Detection
-                </a>
-                <a href="{{ url_for('live_detection') }}" class="btn btn-outline-secondary btn-lg px-4">
-                    <i class="fas fa-video me-2"></i>Live Detection
-                </a>
+            <a href="{{ url_for('detect') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                <i class="fas fa-camera me-2"></i>Start Detection
+            </a>
+            <a href="{{ url_for('live_detection') }}" class="btn btn-outline-secondary btn-lg px-4">
+                <i class="fas fa-video me-2"></i>Live Detection
+            </a>
             {% else %}
-                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-4 me-md-2">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login
-                </a>
-                <a href="{{ url_for('register') }}" class="btn btn-outline-secondary btn-lg px-4">
-                    <i class="fas fa-user-plus me-2"></i>Register
-                </a>
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-secondary btn-lg px-4">
+                <i class="fas fa-user-plus me-2"></i>Register
+            </a>
             {% endif %}
         </div>
     </div>
     <div class="col-lg-6">
-        <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="SafeCamAI Detection" class="img-fluid rounded shadow-lg">
+        <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="Weapon Detection" class="img-fluid rounded shadow-lg">
     </div>
 </div>
 
@@ -75,7 +75,7 @@
 
 <div class="row mb-5">
     <div class="col-12 text-center">
-        <h2 class="mb-4">How SafeCamAI Works</h2>
+        <h2 class="mb-4">How It Works</h2>
         <p class="lead text-muted">Our advanced system uses state-of-the-art machine learning algorithms</p>
     </div>
 </div>
@@ -139,7 +139,7 @@
                         <p class="text-muted mb-0">Security Manager</p>
                     </div>
                 </div>
-                <p class="card-text">"SafeCamAI has significantly improved our security protocols. The accuracy is impressive and the real-time alerts have been invaluable."</p>
+                <p class="card-text">"This system has significantly improved our security protocols. The accuracy is impressive and the real-time alerts have been invaluable."</p>
             </div>
         </div>
     </div>
@@ -155,7 +155,7 @@
                         <p class="text-muted mb-0">Law Enforcement</p>
                     </div>
                 </div>
-                <p class="card-text">"The SafeCamAI system has become an essential tool in our department. It's fast, accurate, and easy to use."</p>
+                <p class="card-text">"The weapon detection system has become an essential tool in our department. It's fast, accurate, and easy to use."</p>
             </div>
         </div>
     </div>
@@ -171,7 +171,7 @@
                         <p class="text-muted mb-0">Facility Manager</p>
                     </div>
                 </div>
-                <p class="card-text">"We've integrated SafeCamAI into our security infrastructure and it has provided an additional layer of protection for our facility."</p>
+                <p class="card-text">"We've integrated this system into our security infrastructure and it has provided an additional layer of protection for our facility."</p>
             </div>
         </div>
     </div>
@@ -180,7 +180,7 @@
 <div class="row align-items-center bg-light p-5 rounded">
     <div class="col-lg-8">
         <h2 class="mb-3">Ready to enhance your security?</h2>
-        <p class="lead mb-0">Join thousands of organizations that trust SafeCamAI.</p>
+        <p class="lead mb-0">Join thousands of organizations that trust our weapon detection system.</p>
     </div>
     <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
         {% if current_user.is_authenticated %}

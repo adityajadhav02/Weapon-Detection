@@ -92,47 +92,37 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer mt-auto py-3 bg-dark">
+    <footer class="bg-dark text-white py-4 mt-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <h5 class="text-white">SafeCamAI</h5>
-                    <p class="text-white-50">Advanced AI-powered security detection system for enhanced safety and protection.</p>
+                <div class="col-md-6">
+                    <h5>Weapon Detection System</h5>
+                    <p>A comprehensive solution for detecting weapons in images and video streams.</p>
                 </div>
-                <div class="col-md-4">
-                    <h5 class="text-white">Quick Links</h5>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{{ url_for('index') }}" class="text-white-50 text-decoration-none">Home</a></li>
-                        <li><a href="{{ url_for('detect') }}" class="text-white-50 text-decoration-none">Detection</a></li>
-                        <li><a href="{{ url_for('reports') }}" class="text-white-50 text-decoration-none">Reports</a></li>
+                        <li><a href="{{ url_for('index') }}" class="text-white">Home</a></li>
                         {% if current_user.is_authenticated %}
-                            <li><a href="{{ url_for('dashboard') }}" class="text-white-50 text-decoration-none">Dashboard</a></li>
+                        <li><a href="{{ url_for('dashboard') }}" class="text-white">Dashboard</a></li>
+                        <li><a href="{{ url_for('detect') }}" class="text-white">Detect</a></li>
                         {% else %}
-                            <li><a href="{{ url_for('login') }}" class="text-white-50 text-decoration-none">Login</a></li>
-                            <li><a href="{{ url_for('register') }}" class="text-white-50 text-decoration-none">Register</a></li>
+                        <li><a href="{{ url_for('login') }}" class="text-white">Login</a></li>
+                        <li><a href="{{ url_for('register') }}" class="text-white">Register</a></li>
                         {% endif %}
                     </ul>
                 </div>
-                <div class="col-md-4">
-                    <h5 class="text-white">Contact</h5>
-                    <ul class="list-unstyled text-white-50">
-                        <li><i class="fas fa-envelope me-2"></i> support@safecamai.com</li>
-                        <li><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
-                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Security Street, Tech City</li>
+                <div class="col-md-3">
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2"></i> support@weapondetection.com</li>
+                        <li><i class="fas fa-phone me-2"></i> +1 (123) 456-7890</li>
                     </ul>
                 </div>
             </div>
-            <hr class="my-4 border-light">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="mb-0 text-white-50">&copy; 2024 SafeCamAI. All rights reserved.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <a href="#" class="text-white-50 me-3 text-decoration-none"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-white-50 me-3 text-decoration-none"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white-50 me-3 text-decoration-none"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="text-white-50 text-decoration-none"><i class="fab fa-github"></i></a>
-                </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2023 Weapon Detection System. All rights reserved.</p>
             </div>
         </div>
     </footer>
